@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Closures</title>
+</head>
+
+<body>
+    <script>
+        // function outer() {
+        //     const outerVar = 'Hey I am an outer var';
+        //     function inner() {
+        //         const innerVar = 'Hey I am an inner var';
+        //         console.log(innerVar);
+        //         console.log(outerVar);
+        //     }
+        //     return inner;
+        // }
+
+        // // innerFn is actually a funtion now, because we returned inner
+        // const innerFn = outer();
+
+        // // ...
+        // // do some more stuff in your application
+        // // ...
+
+        // // call the saved function at a later time
+
+        // innerFn();
+
+        function createGreeting(greeting = '') {
+            const myGreet = greeting.toUpperCase();
+            return function (name) {
+                return `${myGreet} ${name}`;
+            }
+        }
+
+        // now we can create functions based off of whatever greeting you like
+
+        const sayHello = createGreeting('hello');
+        const sayHey = createGreeting('hey');
+
+        console.log(sayHello('sharif'));
+        console.log(sayHello('kelly'));
+        console.log(sayHey('kelly'));
+
+
+        function createGame(gameName) {
+            let score = 0;
+            return function win() {
+                score++;
+                return `Your name: '${gameName}' score is ${score}`;
+            }
+        }
+
+        const hockeyGame = createGame('Hockey');
+        const soccerGame = createGame('Soccer');
+    </script>
+</body>
+
+</html>

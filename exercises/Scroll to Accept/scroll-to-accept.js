@@ -6,6 +6,7 @@ function obCallback(payload) {
         button.disabled = false;
         console.log('enabled!');
         // stop observing the button
+        // eslint-disable-next-line no-use-before-define
         observer.unobserve(terms.lastElementChild);
     }
 }

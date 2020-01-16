@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Arrays</title>
+    <link rel="stylesheet" href="../base.css">
+</head>
+<body>
+    <script>
+        const names = ['sharif', 'kelly', 'maddox', 'jane'];
+        const names2 = [...names, 'farouk'];
+        names2.unshift('maggie');
+        const names3 = ['amir', ...names2];
+        // mutation method
+        let namesBackwards = names.reverse();
+        // now names is also reversed, so namesBackwards and names are the same
+        // as such, we do not necessarily need a second array:
+        names.reverse();
+        // also note that both arrays have now been reversed twice because their pointers are linked the same way objects are (pass by reference)
+        console.log(names, namesBackwards);
+
+        // immutable
+        const sliced = names.slice(1,3);
+        console.log(sliced);
+        console.log(names);
+
+        // make a copy so the values are not mutated
+        namesBackwards = [...names];
+        namesBackwards.reverse();
+        console.log(names, namesBackwards);
+
+        console.log(names3);
+        names3.splice(2,2);
+        console.log(names3);
+
+        const bands = ['parkway drive', 'slayer', 'killswitch engage', 'oceans ate alaska'];
+        const newBands = [
+            ...bands.slice(0,2),
+            'bring me the horizon', 'a day to remember', 
+            ...bands.slice(2)
+        ];
+        console.log(newBands);
+        const bands2 = [
+            ...newBands.slice(0,3),
+            ...newBands.slice(4)
+        ];
+        console.log(bands2);
+
+        const comments = [
+            { text: 'Cool beans', id: 123 },
+            { text: 'Sick!', id: 124 },
+            { text: 'Love it', id: 125 },
+            { text: 'Sweet', id: 126 },
+            { text: 'Hot coleslaw', id: 127 },
+            { text: 'Whatever, man', id: 128 },
+        ];
+        function deleteComment(id, listOfComments){
+            // find the index of the item in the array
+            const indexToDelete = listOfComments.findIndex(comment => (comment.id === id));
+            // make a new array without that item in it
+            const withoutDeleted = [
+                ...listOfComments.slice(0, indexToDelete),
+                ...listOfComments.slice(indexToDelete + 1)
+            ];
+            // return our new array
+            return withoutDeleted;
+        }
+        const sharifIndex = names.findIndex(name => (name === 'sharif'));
+        console.log(names[sharifIndex]);
+        const updatedComments = deleteComment(127, comments);
+        console.log(updatedComments);
+    </script>
+</body>
+</html>

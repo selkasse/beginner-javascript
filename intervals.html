@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Intervals and Timers</title>
+    <link rel="stylesheet" href="../base.css">
+</head>
+<body>
+    <script>
+
+        function buzzer(){
+            console.log('ERRRRRRNNNNG');
+        }
+
+        // console.log('starting');
+        // setTimeout(buzzer,2000);
+        // console.log('finishing');
+
+        
+        function setImmediateInterval(func, ms){
+            // right away, call the funcion (func)
+            func();
+            // run a regular interval
+            return setInterval(func, ms);
+        }
+        
+        // setImmediateInterval(buzzer, 2000);
+        let destroyed = false;
+
+        function destroy(){
+            destroyed = true;
+            document.body.innerHTML = `<p>DESTROYED</p>`;
+        }
+
+        let bombTimer = setTimeout(destroy, 5000);
+
+        window.addEventListener('click', function(){
+            clearTimeout(bombTimer); // stop the timer from running
+            if(!destroyed){
+                console.log('You clicked the page and saved it from destruction!');
+                bombTimer = setTimeout(destroy, 5000);
+            }
+            else{
+                console.log('You are too late. The page has been destroyed');
+            }
+        })
+
+        const shamrockInterval = setInterval(function() {
+            console.log(`☘ Luck o'the Irish, lad! ☘`);
+            console.log('Kiss me blarnacles');
+        }, 500);
+
+        setTimeout(function(){
+            clearInterval(shamrockInterval);
+        }, 5000);
+    </script>
+</body>
+</html>

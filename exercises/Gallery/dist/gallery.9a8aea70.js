@@ -117,74 +117,101 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"../../../../../../../home/idev/.nvm/versions/node/v13.5.0/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
-var bundleURL = null;
+})({"gallery.js":[function(require,module,exports) {
+/* eslint-disable no-use-before-define */
+function Gallery(gallery) {
+  if (!gallery) {
+    throw new Error('No Gallery Found!');
+  } // select the elements we need
+  // we are doing it inside the function
+  // so tho that gallery1 and gallery2 do not interfere with each other
 
-function getBundleURLCached() {
-  if (!bundleURL) {
-    bundleURL = getBundleURL();
+
+  var images = Array.from(gallery.querySelectorAll('img')); // we use document instead of gallery here
+  // because the modal is shared by both galleries via the window
+
+  var modal = document.querySelector('.modal');
+  var prevButton = modal.querySelector('.prev');
+  var nextButton = modal.querySelector('.next');
+  var currentImage;
+
+  function openModal() {
+    console.info('Opening modal...'); // first, check if the modal is already open
+
+    if (modal.matches('.open')) {
+      console.info('modal already open');
+      return; // stop the function from running
+    }
+
+    modal.classList.add('open'); // Event listeners to be bound when we open the modal
+
+    window.addEventListener('keyup', handleKeyUp);
+    nextButton.addEventListener('click', showNextImage);
+    prevButton.addEventListener('click', showPrevImage);
   }
 
-  return bundleURL;
-}
+  function closeModal() {
+    modal.classList.remove('open'); // TODO: add event listeners for events and keyboard
 
-function getBundleURL() {
-  // Attempt to find the URL of the current script and use that as the base URL
-  try {
-    throw new Error();
-  } catch (err) {
-    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+    window.removeEventListener('keyup', handleKeyUp);
+    nextButton.removeEventListener('click', showNextImage);
+    prevButton.removeEventListener('click', showPrevImage);
+  }
 
-    if (matches) {
-      return getBaseURL(matches[0]);
+  function handleKeyUp(e) {
+    if (e.key === 'Escape') return closeModal();
+    if (e.key === 'ArrowRight') return showNextImage();
+    if (e.key === 'ArrowLeft') return showPrevImage();
+  }
+
+  function handleClickOutside(e) {
+    if (e.target === e.currentTarget) {
+      closeModal();
     }
   }
 
-  return '/';
-}
+  function showImage(el) {
+    if (!el) {
+      console.info('no image to show');
+      return;
+    } // update the modal with this info
 
-function getBaseURL(url) {
-  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
-}
 
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-},{}],"../../../../../../../home/idev/.nvm/versions/node/v13.5.0/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
-var bundle = require('./bundle-url');
-
-function updateLink(link) {
-  var newLink = link.cloneNode();
-
-  newLink.onload = function () {
-    link.remove();
-  };
-
-  newLink.href = link.href.split('?')[0] + '?' + Date.now();
-  link.parentNode.insertBefore(newLink, link.nextSibling);
-}
-
-var cssTimeout = null;
-
-function reloadCSS() {
-  if (cssTimeout) {
-    return;
+    modal.querySelector('img').src = el.src;
+    modal.querySelector('h2').textContent = el.title;
+    modal.querySelector('figure p').textContent = el.dataset.description;
+    currentImage = el;
+    openModal();
   }
 
-  cssTimeout = setTimeout(function () {
-    var links = document.querySelectorAll('link[rel="stylesheet"]');
+  function showNextImage() {
+    // the || gallery.firstElementChild will
+    // allow the images to 'round robin' instead of stopping at the end
+    showImage(currentImage.nextElementSibling || gallery.firstElementChild);
+  }
 
-    for (var i = 0; i < links.length; i++) {
-      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
-        updateLink(links[i]);
-      }
-    }
+  function showPrevImage() {
+    showImage(currentImage.previousElementSibling || gallery.lastElementChild);
+  } // Event Listeners
 
-    cssTimeout = null;
-  }, 50);
-}
 
-module.exports = reloadCSS;
-},{"./bundle-url":"../../../../../../../home/idev/.nvm/versions/node/v13.5.0/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"../../../../../../../home/idev/.nvm/versions/node/v13.5.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+  images.forEach(function (image) {
+    return image.addEventListener('click', function (e) {
+      return showImage(e.currentTarget);
+    });
+  });
+  images.forEach(function (image) {
+    return image.addEventListener('keyup', function (e) {
+      if (e.key === 'Enter') showImage(e.currentTarget);
+    });
+  });
+  modal.addEventListener('click', handleClickOutside);
+} // use it on the page
+
+
+var gallery1 = Gallery(document.querySelector('.gallery1'));
+var gallery2 = Gallery(document.querySelector('.gallery2'));
+},{}],"../../../../../../../home/idev/.nvm/versions/node/v13.5.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -212,7 +239,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61386" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61156" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -388,5 +415,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../../../home/idev/.nvm/versions/node/v13.5.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
-//# sourceMappingURL=/face.js.map
+},{}]},{},["../../../../../../../home/idev/.nvm/versions/node/v13.5.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","gallery.js"], null)
+//# sourceMappingURL=/gallery.9a8aea70.js.map
